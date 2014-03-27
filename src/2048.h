@@ -1,5 +1,5 @@
-#ifndef 2048_H
-#define 2048_H
+#ifndef C2048_H
+#define C2048_H
 
 #include <stdio.h>
 #include <stdlib.h>
