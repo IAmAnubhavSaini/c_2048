@@ -132,7 +132,26 @@ void MergeLeft(void)
 	int k = 0;
 	int sum = 0;
 printf("\nML\n");
-	
+	for(i = 0; i < D; ++i){
+		for(j = 4*i; j < 4*i + D-1; ++j){
+			sum = 0;
+			if(Tiles[j] != 0){
+				sum = Tiles[j];
+				for(k = j+1; k <= 4*i + D-1; ++k){
+					if(Tiles[k] != 0 && Tiles[k]==Tiles[j]){
+						sum+=Tiles[k];
+						Tiles[j] = sum;
+						Tiles[k] = 0;
+						++j;
+						break;
+					}
+					if(Tiles[k]==0) continue;
+							
+				}
+				if(k >= 4*i+D) break;
+			}
+		}
+	}
 }
 
 void MergeDown(void)
@@ -142,7 +161,27 @@ void MergeDown(void)
 	int k = 0;
 	int sum = 0;
 printf("\nMD\n");	
-	
+	for(i = 0; i < D; ++i){
+		for(j = D*(D-1)+i; j > i; j -= 4){
+			sum = 0;
+			if(Tiles[j] != 0){
+				sum = Tiles[j];
+				for(k = j-4; k >= i; k -= 4){
+					if(Tiles[k] != 0 && Tiles[j] == Tiles[k]){
+						sum += Tiles[k];
+						Tiles[j] = sum;
+						Tiles[k] = 0;
+						j-=4;
+						break;
+					} 
+					if(Tiles[k] == 0){
+						continue;
+					}
+				}
+				if(k < i) break;
+			}
+		}
+	}
 }
 
 void MergeUp(void)
@@ -152,7 +191,27 @@ void MergeUp(void)
 	int k = 0;
 	int sum = 0;
 printf("\nMU\n");
-	
+	for(i = 0; i < D; ++i){
+		for(j = i; j < D*(D-1) + i; j += 4){
+			sum = 0;
+			if(Tiles[j] != 0){
+				sum = Tiles[j];
+				for(k = j+4; k <= D*(D-1) + i; k += 4){
+					if(Tiles[k] != 0 && Tiles[j] == Tiles[k]){
+						sum += Tiles[k];
+						Tiles[j] = sum;
+						Tiles[k] = 0;
+						j+=4;
+						break;
+					}
+					if(Tiles[k] == 0){
+						continue;
+					}
+				}
+				if(k >= D*D) break;
+			}
+		}
+	}
 	
 }
 
