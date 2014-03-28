@@ -13,16 +13,22 @@
 static int Tiles[GAMESIZE];
 
 /* we need randomizer */
-int GetRandomNumberWeNeed(int n, int m);
+//int GetRandomNumberWeNeed(int n, int m);
 /* we need movement functionality */
 
 /* tiles functionality */
+int NoSpaceAvailable(void);
+int SpaceAvailable(void);
+int NextStep(void);
 void InitTiles(void);
 void ShiftRight(void);
 void ShiftLeft(void);
 void ShiftUp(void);
 void ShiftDown(void);
-void MergeTiles(int this, int tothis);
+void MergeUp(void);
+void MergeDown(void);
+void MergeLeft(void);
+void MergeRight(void);
 void PrintTiles(void);
 
 #endif
