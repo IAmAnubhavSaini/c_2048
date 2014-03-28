@@ -154,8 +154,8 @@ void MergeRight(void)
 				if(Tiles[k] == Tiles[j]){
 					Tiles[j] *= 2;
 					Tiles[k] = 0;
+					j = k;
 				}
-				j = k;
 				break;
 			}
 		}
@@ -177,8 +177,8 @@ void MergeLeft(void)
 				if(Tiles[j] == Tiles[k]){
 					Tiles[j] *= 2;
 					Tiles[k] = 0;
+					j = k;
 				}
-				j = k;
 				break;
 			}
 		}
@@ -195,13 +195,13 @@ void MergeDown(void)
 	for(i = 0; i < D; ++i){
 		for(j = D*(D-1) + i; j > i; j -= D){
 			if(Tiles[j] == 0) continue;
-			for(k = j - D; k >= D*(D-1) + i; k -= D){
+			for(k = j - D; k >= i; k -= D){
 				if(Tiles[k] == 0) continue;
 				if(Tiles[j] == Tiles[k]){
 					Tiles[j] *= 2;
 					Tiles[k] = 0;
+					j = k;
 				}
-				j = k;
 				break;
 			}
 		}
@@ -222,8 +222,8 @@ void MergeUp(void)
 				if(Tiles[j] == Tiles[k]){
 					Tiles[j] *= 2;
 					Tiles[k] = 0;
+					j = k;
 				}
-				j = k;
 				break;
 			}
 		}
@@ -256,7 +256,7 @@ void PlayGame()
 			break;
 		}
 		PrintTiles();
-		userChoice = getch();
+		userChoice = getchar();
 		switch(userChoice){
 		case 'a':
 		case 'A':
