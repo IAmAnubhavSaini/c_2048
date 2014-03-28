@@ -257,6 +257,7 @@ void PlayGame()
 		}
 		PrintTiles();
 		userChoice = getchar();
+		if(userChoice=='\n') userChoice = getchar();
 		switch(userChoice){
 		case 'a':
 		case 'A':
