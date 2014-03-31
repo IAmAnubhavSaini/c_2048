@@ -235,9 +235,26 @@ void MergeUp(void)
 void PrintTiles()
 {
 	int i = D, j = D;
+	int val = 0, pair = 0;
+	start_color();
+	init_pair(1, COLOR_RED, COLOR_BLACK);
+	init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+
 	for(i = 0; i < D; ++i){
 		for(j = 0; j < D; ++j){
-			printf("%6d", Tiles[D*i+j]);
+			val = Tiles[D*i+j];
+			pair = 0;
+			if(val >= 512){
+				pair = 2;
+			} else if(val >= 32){
+				pair = 1;
+			}
+			if(pair)
+			attron(COLOR_PAIR(pair));
+			printf("%6d", val);
+			if(pair)
+			attroff(COLOR_PAIR(pair));
+			
 		}
 		printf("\n\n");
 	}
@@ -251,13 +268,14 @@ void PlayGame()
 	InitTiles();
 	NextStep();
 	do{
-		printf("\n\n\n");
+
 		if(!NextStep()){
 			break;
 		}
 		PrintTiles();
-		userChoice = getchar();
-		if(userChoice=='\n') userChoice = getchar();
+		refresh();	// printing on screen - via ncurses.
+		userChoice = getch();
+//		if(userChoice=='\n') userChoice = getchar();
 		switch(userChoice){
 		case 'a':
 		case 'A':
@@ -272,13 +290,19 @@ void PlayGame()
 		case 'S':
 			MergeDown(); ShiftDown(); break;
 		}
-		printf("\n\n\n");
+		clear();		
 	}
 	while(SpaceAvailable() && userChoice != 'k');
 	printf("\nGame over.\n");
+	
 }
 
 int main()
 {
+	initscr();
+	
+	noecho();
+	
 	PlayGame();
+	endwin();
 }

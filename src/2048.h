@@ -5,6 +5,13 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <ncurses.h>
+
+#if CURSED
+#define printf printw
+#else
+#define printf printf
+#endif
 
 // D for Dimension
 #define D 4 
