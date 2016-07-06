@@ -1,31 +1,34 @@
 #include "2048.h"
 
-int NoSpaceAvailable(void)
+int isNoSpaceAvailable(void)
 {
 	int i = 0;
-	int allFill = 1;
+	int full = 1;
 
-	for(i = 0, allFill = 1; i < GAMESIZE && allFill; ++i){
+	for(i = 0, full = 1; i < GAMESIZE && full; ++i){
 		if(Tiles[i] == 0){
-			allFill = 0;
+			full = 0;
 		}
 	}
 
-	return allFill;
+	return full;
 }
 
-int SpaceAvailable(void)
+int isSpaceAvailable(void)
 {
-	return !NoSpaceAvailable();
+	return !isNoSpaceAvailable();
 }
 
 int NextStep(void)
+/* This function is bonkers. Look at the got_what_we_need thingy.
+ * It doesn't make sense at all.
+ */
 {
 	int random_loc = 0;
 	int got_what_we_need = 1;
 	// init random numbers generation seed
 
-	if(NoSpaceAvailable()) return 0;
+	if(isNoSpaceAvailable()) return 0;
 
 	srand(time(NULL));
 
@@ -53,18 +56,17 @@ void ShiftRight(void)
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	// most eligible space
-	int mes = 0;
-	
+	int mostEligibleSpace = 0;
+
 	for(i = 0; i < D; ++i){
-		mes = 4*i + D-1;
-		for(j = mes; j > 4*i; --j){
+		mostEligibleSpace = 4 * i + D - 1;
+		for(j = mostEligibleSpace; j > 4 * i; --j){
 			if(Tiles[j] != 0) continue;
 
-			for(k = j-1; k >= 4*i; --k){
+			for(k = j - 1; k >= 4 * i; --k){
 				if(Tiles[k] != 0) break;
 			}
-			if(k >= 4*i && Tiles[k] != 0){ // put k >= 0 and boom, bad logic
+			if(k >= 4 * i && Tiles[k] != 0){ // put k >= 0 and boom, bad logic
 				Tiles[j] = Tiles[k];
 				Tiles[k] = 0;
 			}
@@ -77,18 +79,17 @@ void ShiftLeft(void)
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	// most eligible space
-	int mes = 0;
-	
+	int mostEligibleSpace = 0;
+
 	for(i = 0; i < D; ++i){
-		mes = 4*i + 0;
-		for(j = mes; j < 4*i + D-1; ++j){
+		mostEligibleSpace = 4 * i + 0;
+		for(j = mostEligibleSpace; j < 4 * i + D - 1; ++j){
 			if(Tiles[j] != 0) continue;
 
-			for(k = j+1; k <= 4*i+D-1; ++k){
+			for(k = j + 1; k <= 4 * i + D - 1; ++k){
 				if(Tiles[k] != 0) break;
 			}
-			if(k <= 4*i+D-1 && Tiles[k] != 0){ // put k >= 0 and boom, bad logic
+			if(k <= 4 * i + D - 1 && Tiles[k] != 0){ // put k >= 0 and boom, bad logic
 				Tiles[j] = Tiles[k];
 				Tiles[k] = 0;
 			}
@@ -101,15 +102,14 @@ void ShiftDown(void)
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	// most eligible space
-	int mes = 0;
-	
+	int mostEligibleSpace = 0;
+
 	for(i = 0; i < D; ++i){
-		mes = i + D*(D-1);
-		for(j = mes; j >  i; j-=4){
+		mostEligibleSpace = i + D * (D - 1);
+		for(j = mostEligibleSpace; j >  i; j -= 4){
 			if(Tiles[j] != 0) continue;
 
-			for(k = j-4; k >= i; k-=4){
+			for(k = j - 4; k >= i; k -= 4){
 				if(Tiles[k] != 0) break;
 			}
 			if(k >= i && Tiles[k] != 0){ // put k >= 0 and boom, bad logic
@@ -125,14 +125,14 @@ void ShiftUp(void)
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	
+
 	for(i = 0; i < D; ++i){
-		for(j = i; j < D*(D-1) + i; j += 4){
+		for(j = i; j < D * (D - 1) + i; j += 4){
 			if(Tiles[j] != 0) continue;
-			for(k = j+4; k <= D*(D-1)+i; k += 4){
+			for(k = j + 4; k <= D * (D - 1) + i; k += 4){
 				if(Tiles[k] != 0) break;
 			}
-			if(k <= D*(D-1)+i && Tiles[k]!= 0){
+			if(k <= D * (D - 1) + i && Tiles[k]!= 0){
 				Tiles[j] = Tiles[k];
 				Tiles[k] = 0;
 			}
@@ -145,12 +145,12 @@ void MergeRight(void)
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	
+
 	for(i = 0; i < D; ++i){
-		for(j = 4*i + D-1; j > 4*i; --j){
-			if(Tiles[j]==0) continue;
-			for(k = j-1; k >= 4*i; --k){
-				if(Tiles[k]==0) continue;
+		for(j = 4 * i + D - 1; j > 4 * i; --j){
+			if(Tiles[j] == 0) continue;
+			for(k = j - 1; k >= 4 * i; --k){
+				if(Tiles[k] == 0) continue;
 				if(Tiles[k] == Tiles[j]){
 					Tiles[j] *= 2;
 					Tiles[k] = 0;
@@ -170,9 +170,9 @@ void MergeLeft(void)
 	int k = 0;
 
 	for(i = 0; i < D; ++i){
-		for(j = 4*i; j < 4*i + D-1; ++j){
+		for(j = 4 * i; j < 4 * i + D - 1; ++j){
 			if(Tiles[j] == 0) continue;
-			for(k = j+1; k <= 4*i + D-1; ++k){
+			for(k = j + 1; k <= 4 * i + D - 1; ++k){
 				if(Tiles[k] == 0) continue;
 				if(Tiles[j] == Tiles[k]){
 					Tiles[j] *= 2;
@@ -183,7 +183,7 @@ void MergeLeft(void)
 			}
 		}
 	}
-	
+
 }
 
 void MergeDown(void)
@@ -191,9 +191,9 @@ void MergeDown(void)
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	
+
 	for(i = 0; i < D; ++i){
-		for(j = D*(D-1) + i; j > i; j -= D){
+		for(j = D * (D - 1) + i; j > i; j -= D){
 			if(Tiles[j] == 0) continue;
 			for(k = j - D; k >= i; k -= D){
 				if(Tiles[k] == 0) continue;
@@ -213,11 +213,11 @@ void MergeUp(void)
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	
+
 	for(i = 0; i < D; ++i){
-		for(j = i; j < D*(D-1) + i; j += D){
+		for(j = i; j < D * (D - 1) + i; j += D){
 			if(Tiles[j] == 0) continue;
-			for(k = j + D; k <= D*(D-1) + i; k += D){
+			for(k = j + D; k <= D * (D - 1) + i; k += D){
 				if(Tiles[k] == 0) continue;
 				if(Tiles[j] == Tiles[k]){
 					Tiles[j] *= 2;
@@ -228,8 +228,8 @@ void MergeUp(void)
 			}
 		}
 	}
-	
-	
+
+
 }
 
 void PrintTiles()
@@ -242,7 +242,7 @@ void PrintTiles()
 
 	for(i = 0; i < D; ++i){
 		for(j = 0; j < D; ++j){
-			val = Tiles[D*i+j];
+			val = Tiles[D * i + j];
 			pair = 0;
 			if(val >= 512){
 				pair = 2;
@@ -254,7 +254,7 @@ void PrintTiles()
 			printf("%6d", val);
 			if(pair)
 			attroff(COLOR_PAIR(pair));
-			
+
 		}
 		printf("\n\n");
 	}
@@ -290,19 +290,19 @@ void PlayGame()
 		case 'S':
 			MergeDown(); ShiftDown(); break;
 		}
-		clear();		
+		clear();
 	}
-	while(SpaceAvailable() && userChoice != 'k');
+	while(isSpaceAvailable() && userChoice != 'k');
 	printf("\nGame over.\n");
-	
+
 }
 
 int main()
 {
 	initscr();
-	
+
 	noecho();
-	
+
 	PlayGame();
 	endwin();
 }

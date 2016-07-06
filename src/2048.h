@@ -24,8 +24,8 @@ static int Tiles[GAMESIZE];
 /* we need movement functionality */
 
 /* tiles functionality */
-int NoSpaceAvailable(void);
-int SpaceAvailable(void);
+int isNoSpaceAvailable(void);
+int isSpaceAvailable(void);
 int NextStep(void);
 void InitTiles(void);
 void ShiftRight(void);
